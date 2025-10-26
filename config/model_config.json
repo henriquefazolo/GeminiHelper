@@ -1,0 +1,7 @@
+{
+  "webhook":"webhook_link",
+  "google_genai_secret_file": "genai google token",
+  "gemini_model": "gemini-2.5-flash-lite",
+  "shutdown_application_keys": ["0"],
+  "callback_screenshot_to_gemini_keys": ["up", "down", "left", "right", "alt", "f9"]
+}
