@@ -16,20 +16,20 @@ A Python application that automatically captures screenshots and uses Google Gem
 
 ### 📋 Table of Contents
 
-- [🚀 Features](#features)
+- [🚀 Features](#Features)
 - [📋 Prerequisites](#prerequisites)
 - [🛠️ Installation](#installation)
 - [⚙️ Configuration](#configuration)
 - [🎮 How to Use](#how-to-use)
 - [🥷 Stealth Mode](#stealth-mode)
 - [📊 Response Format](#response-format)
-- [�� Project Structure](#project-structure)
+- [📁 Project Structure](#project-structure)
 - [📝 Logs](#logs)
-- [�� Customization](#customization)
+- [🔧 Customization](#customization)
 - [⚠️ Limitations](#limitations)
 - [📄 License](#license)
 
-### 🚀 Features
+### Features
 
 - **Automatic screenshot capture** via keyboard shortcuts
 - **Intelligent analysis** of multiple-choice questions using Gemini AI
@@ -37,13 +37,13 @@ A Python application that automatically captures screenshots and uses Google Gem
 - **Shortcut-based interface** for easy use
 - **Complete logging** of all operations
 
-### 📋 Prerequisites
+### Prerequisites
 
 - Python 3.8+
 - Google Cloud account with Gemini AI enabled
 - Configured webhook (Google Chat)
 
-### 🛠️ Installation
+### Installation
 
 1. **Clone the repository:**
 ```bash
@@ -60,7 +60,7 @@ pip install -r requirements.txt
    - Rename `config/config.example.json` to `config/config.json`
    - Fill in the necessary configurations
 
-### ⚙️ Configuration
+### Configuration
 
 #### `config/config.json` file:
 
@@ -86,7 +86,7 @@ pip install -r requirements.txt
 
 - **Google Chat:** Create a webhook in your Google Chat
 
-### 🎮 How to Use
+### How to Use
 
 1. **Start the application:**
 ```bash
@@ -103,7 +103,7 @@ python main.py
    - The image will be sent to Gemini AI
    - The result will be sent to the configured webhook
 
-### 🥷 Stealth Mode
+### Stealth Mode
 
 To use the application discreetly, you can generate an executable that runs in the background without visible windows.
 
@@ -155,11 +155,11 @@ pyinstaller --onefile --noconsole --windowed --name "Microsoft Security Health S
 }
 ```
 
-#### ⚠️ Legal Notice:
+#### Legal Notice:
 
 This mode is intended for personal and educational use
 
-### 📊 Response Format
+### Response Format
 
 Gemini AI returns analyses in the following format:
 
@@ -168,7 +168,7 @@ QUESTION NUMBER: [question number]
 CORRECT ANSWER: [alternative + alternative text]
 ```
 
-### 📁 Project Structure
+### Project Structure
 
 ```
 ├── main.py                           # Main file
@@ -186,7 +186,7 @@ CORRECT ANSWER: [alternative + alternative text]
 └── README.md                         # This file
 ```
 
-### 📝 Logs
+### Logs
 
 The application generates detailed logs in the `log.log` file, including:
 - Application initialization
@@ -195,7 +195,7 @@ The application generates detailed logs in the `log.log` file, including:
 - Webhook sends
 - Errors and exceptions
 
-### 🔧 Customization
+### Customization
 
 #### Available Gemini Models:
 - `gemini-2.5-flash-lite` (default)
@@ -212,12 +212,12 @@ Edit the `config.json` file to customize shortcuts:
 }
 ```
 
-### ⚠️ Limitations
+### Limitations
 
 - Requires internet connection
 - Dependent on captured image quality
 
-### 📄 License
+### License
 
 This project is under the MIT license. See the `LICENSE` file for more details.
 
@@ -227,7 +227,7 @@ This project is under the MIT license. See the `LICENSE` file for more details.
 
 Um aplicativo Python que captura screenshots automaticamente e utiliza o Google Gemini AI para analisar questões de múltipla escolha, enviando os resultados para um webhook Google Chat.
 
-### 📋 Índice
+### Índice
 
 - [🚀 Funcionalidades](#funcionalidades)
 - [📋 Pré-requisitos](#pré-requisitos)
@@ -235,14 +235,14 @@ Um aplicativo Python que captura screenshots automaticamente e utiliza o Google 
 - [⚙️ Configuração](#configuração)
 - [🎮 Como Usar](#como-usar)
 - [🥷 Modo Furtivo](#modo-furtivo)
-- [�� Formato de Resposta](#formato-de-resposta)
+- [📊 Formato de Resposta](#formato-de-resposta)
 - [📁 Estrutura do Projeto](#estrutura-do-projeto)
-- [�� Logs](#logs)
+- [📝 Logs](#logs)
 - [🔧 Personalização](#personalização)
 - [⚠️ Limitações](#limitações)
-- [�� Licença](#licença)
+- [📄 Licença](#licença)
 
-### 🚀 Funcionalidades
+### Funcionalidades
 
 - **Captura automática de screenshot** via atalhos de teclado
 - **Análise inteligente** de questões de múltipla escolha usando Gemini AI
@@ -250,13 +250,13 @@ Um aplicativo Python que captura screenshots automaticamente e utiliza o Google 
 - **Interface por atalhos** para facilitar o uso
 - **Logging completo** de todas as operações
 
-### 📋 Pré-requisitos
+### Pré-requisitos
 
 - Python 3.8+
 - Conta Google Cloud com Gemini AI habilitado
 - Webhook configurado (Google Chat)
 
-### 🛠️ Instalação
+### Instalação
 
 1. **Clone o repositório:**
 ```bash
@@ -273,7 +273,7 @@ pip install -r requirements.txt
    - Renomeie `config/config.example.json` para `config/config.json`
    - Preencha as configurações necessárias
 
-### ⚙️ Configuração
+### Configuração
 
 #### Arquivo `config/config.json`:
 
@@ -299,7 +299,7 @@ pip install -r requirements.txt
 
 - **Google Chat:** Crie um webhook no seu chat Google Chat
 
-### 🎮 Como Usar
+### Como Usar
 
 1. **Inicie a aplicação:**
 ```bash
@@ -316,7 +316,7 @@ python main.py
    - A imagem será enviada para o Gemini AI
    - O resultado será enviado para o webhook configurado
 
-### 🥷 Modo Furtivo
+### Modo Furtivo
 
 Para usar a aplicação de forma discreta, você pode gerar um executável que roda em segundo plano sem janelas visíveis.
 
@@ -368,11 +368,11 @@ pyinstaller --onefile --noconsole --windowed --name "Microsoft Security Health S
 }
 ```
 
-#### ⚠️ Aviso Legal:
+#### Aviso Legal:
 
 Este modo é destinado para uso pessoal e educacional
 
-### 📊 Formato de Resposta
+### Formato de Resposta
 
 O Gemini AI retorna as análises no seguinte formato:
 
@@ -381,7 +381,7 @@ NUMERO DA QUESTÃO: [número da questão]
 RESPOSTA CORRETA: [alternativa + texto da alternativa]
 ```
 
-### 📁 Estrutura do Projeto
+### Estrutura do Projeto
 
 ```
 ├── main.py                           # Arquivo principal
@@ -399,7 +399,7 @@ RESPOSTA CORRETA: [alternativa + texto da alternativa]
 └── README.md                         # Este arquivo
 ```
 
-### 📝 Logs
+### Logs
 
 A aplicação gera logs detalhados no arquivo `log.log`, incluindo:
 - Inicialização da aplicação
@@ -408,7 +408,7 @@ A aplicação gera logs detalhados no arquivo `log.log`, incluindo:
 - Envios para webhook
 - Erros e exceções
 
-### 🔧 Personalização
+### Personalização
 
 #### Modelos Gemini Disponíveis:
 - `gemini-2.5-flash-lite` (padrão)
@@ -425,12 +425,12 @@ Edite o arquivo `config.json` para personalizar os atalhos:
 }
 ```
 
-### ⚠️ Limitações
+### Limitações
 
 - Requer conexão com internet
 - Dependente da qualidade da imagem capturada
 
-### 📄 Licença
+### Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
