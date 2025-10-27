@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     imagem = ImageGrab.grabclipboard()
 
-    credentials_path_input = r'../config/gen-lang-client-0431564791-ac6b301fe660.json'
+    credentials_path_input = r''
     gemini_service = gemini_service_account(credentials_path_input)
     logger.info(f'Using {gemini_service.model_name}')
 

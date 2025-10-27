@@ -28,7 +28,8 @@ def send_msg_to_webhook(webhook_link, message):
 
 
 if __name__ == '__main__':
+    from utils.load_json_config import load_json_config
 
-    webhook = 'https://chat.googleapis.com/v1/spaces/AAQAvzJTL4o/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=OvzIn5y76TH9CUvSihc_JFnuVbM6DjkZ8nz0s14hhd0'
+    webhook = load_json_config(r'../config/config.json').get('webhook')
 
     send_msg_to_webhook(webhook, 'oi')
