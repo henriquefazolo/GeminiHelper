@@ -3,10 +3,10 @@ import requests
 import json
 
 
-def send_msg_to_webhook(webhook_link, message):
-    logger = Logger(name=f'{__name__}')
-
+def send_msg_to_webhook(webhook_link, message, logger:Logger = Logger(name=f'{__name__}', log_file=r'log.log')):
     try:
+        logger.info('start')
+
         payload = {
             "text": message
         }
@@ -22,6 +22,7 @@ def send_msg_to_webhook(webhook_link, message):
             timeout=30  # Timeout de 30 segundos
         )
         logger.info(str(response.status_code))
+        logger.info('end')
 
     except Exception as e:
         logger.exception(e)

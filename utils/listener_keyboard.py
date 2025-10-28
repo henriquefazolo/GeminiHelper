@@ -8,10 +8,10 @@ from datetime import datetime
 
 
 class ListenerKeyboard:
-    def __init__(self):
+    def __init__(self, logger: Logger = Logger(name=f'{__name__}', log_file='log.log')):
         self.callbacks: Dict[str, Callable] = {}
         self.status: Optional[bool] = None
-        self.logger = Logger(name=f'{__name__}.{self.__class__.__name__}')
+        self.logger = logger
 
     async def start(self):
         try:

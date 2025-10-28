@@ -7,9 +7,10 @@ from utils.logger import Logger
 from utils.gemini_services import gemini_service_account
 from utils.send_msg_to_webhook import send_msg_to_webhook
 from utils.load_json_config import load_json_config
+
 logger = Logger(name=f'{__name__}', log_file='log.log')
 
-json_config = load_json_config(r'config/config.json')
+json_config = load_json_config(r'config/config.json', logger=Logger(name=f'{__name__}', log_file='log.log'))
 
 webhook = json_config.get('webhook')
 google_genai_secret_file = json_config.get('google_genai_secret_file')
@@ -29,7 +30,7 @@ running = True
 
 async def screenshot_to_gemini(event):
     try:
-        clipboard_success = await screenshot_to_clipboard(event)
+        clipboard_success = await screenshot_to_clipboard(event, logger=Logger(name=f'{__name__}', log_file='log.log'))
 
         imagem = ImageGrab.grabclipboard()
 
@@ -60,13 +61,15 @@ async def screenshot_to_gemini(event):
             - Retorne unicamente o formato obrigatorio na tag <text>
             """
 
-            gemini_service = gemini_service_account(credentials=google_genai_secret_file, genai_model=gemini_model)
+            gemini_service = gemini_service_account(credentials=google_genai_secret_file, genai_model=gemini_model,
+                                                    logger=Logger(name=f'{__name__}', log_file='log.log'))
 
             logger.info(f'Using {gemini_service.model_name}')
 
             result = gemini_service.generate_content([prompt, imagem])
 
-            send_msg_to_webhook(webhook, f'```{result.text.replace('<text>', '').replace('</text>', '')}```')
+            send_msg_to_webhook(webhook, f'```{result.text.replace('<text>', '').replace('</text>', '')}```',
+                                logger=Logger(name=f'{__name__}', log_file='log.log'))
 
     except Exception as e:
         logger.exception(e)
@@ -92,7 +95,7 @@ def callback_screenshot_to_gemini(event):
 async def main():
     global running
 
-    listener = ListenerKeyboard()
+    listener = ListenerKeyboard(logger=Logger(name=f'{__name__}', log_file='log.log'))
 
     for key in callback_screenshot_to_gemini_keys:
         listener.add_callback(key_name=key, callback=callback_screenshot_to_gemini)
@@ -116,7 +119,7 @@ async def main():
     finally:
         logger.info("🛑 Finalizando listener...")
         listener.stop()
-        logger.info("✅ Aplicação finalizada!")
+        logger.info("✅ Aplicação finalizada!\n\n")
 
 
 if __name__ == "__main__":

@@ -7,9 +7,9 @@ from utils.logger import Logger
 from PIL import ImageGrab
 
 
-async def screenshot_to_clipboard(event):
-    logger = Logger(name=f'{__name__}')
+async def screenshot_to_clipboard(event, logger: Logger = Logger(name=f'{__name__}', log_file='../log.log')):
     try:
+        logger.info('start')
         screenshot = ImageGrab.grab()
         if sys.platform == "win32":
             output = io.BytesIO()
@@ -20,7 +20,7 @@ async def screenshot_to_clipboard(event):
             win32clipboard.EmptyClipboard()
             win32clipboard.SetClipboardData(win32con.CF_DIB, data)
             win32clipboard.CloseClipboard()
-            logger.info('screenshot on clipboard')
+            logger.info('end')
             return True
 
     except Exception as e:
@@ -28,6 +28,6 @@ async def screenshot_to_clipboard(event):
 
 if __name__ == '__main__':
     async def run():
-        await screenshot_to_clipboard()
+        await screenshot_to_clipboard(None)
 
     asyncio.run(run())
