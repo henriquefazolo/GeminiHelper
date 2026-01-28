@@ -4,7 +4,8 @@ from PIL import ImageGrab
 from utils.listener_keyboard import ListenerKeyboard
 from utils.screenshot_clipboard import screenshot_to_clipboard
 from utils.logger import Logger
-from utils.gemini_services import gemini_service_account
+from utils.gemini_services_api_key import gemini_service_api_key
+from utils.image_to_base64 import image_to_base64
 from utils.send_msg_to_webhook import send_msg_to_webhook
 from utils.load_json_config import load_json_config
 from utils.parse_gemini_response import parse_gemini_response
@@ -14,14 +15,13 @@ logger = Logger(name=f'{__name__}', log_file='log.log')
 json_config = load_json_config(r'config/config.json', logger=Logger(name=f'{__name__}', log_file='log.log'))
 
 webhook = json_config.get('webhook')
-google_genai_secret_file = json_config.get('google_genai_secret_file')
 gemini_model = json_config.get('gemini_model')
+api_key = json_config.get('api_key')
 
 shutdown_application_keys = json_config.get('shutdown_application_keys')
 callback_screenshot_to_gemini_keys = json_config.get("callback_screenshot_to_gemini_keys")
 
 logger.info(webhook)
-logger.info(google_genai_secret_file)
 logger.info(gemini_model)
 logger.info(shutdown_application_keys)
 logger.info(callback_screenshot_to_gemini_keys)
@@ -77,14 +77,12 @@ async def screenshot_to_gemini(event):
             Analyze the image provided by the user and output only the <root> XML block.
             """
 
-            gemini_service = gemini_service_account(credentials=google_genai_secret_file, genai_model=gemini_model,
-                                                    logger=Logger(name=f'{__name__}', log_file='log.log'))
+            logger.info(f'Using {gemini_model}')
 
-            logger.info(f'Using {gemini_service.model_name}')
+            image_b64 = image_to_base64(imagem)
+            gemini_service = gemini_service_api_key(api_key=api_key, prompt_text=prompt, image_b64=image_b64)
 
-            result = gemini_service.generate_content([prompt, imagem])
-
-            clean_output = parse_gemini_response(result.text)
+            clean_output = parse_gemini_response(gemini_service)
             send_msg_to_webhook(webhook, message=clean_output,
                                 logger=Logger(name=f'{__name__}', log_file='log.log'))
 
