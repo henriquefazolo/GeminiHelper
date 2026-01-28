@@ -7,6 +7,7 @@ from utils.logger import Logger
 from utils.gemini_services import gemini_service_account
 from utils.send_msg_to_webhook import send_msg_to_webhook
 from utils.load_json_config import load_json_config
+from utils.parse_gemini_response import parse_gemini_response
 
 logger = Logger(name=f'{__name__}', log_file='log.log')
 
@@ -35,30 +36,45 @@ async def screenshot_to_gemini(event):
         imagem = ImageGrab.grabclipboard()
 
         if clipboard_success:
-            prompt = """Você é um assistente especializado em análise de questões de múltipla escolha.
+            prompt = """
+            You are an expert AI Exam Solver specialized in visual analysis of multiple-choice questions.
 
-            TAREFA: Analise a imagem e resolva a questão apresentada.
+            ### INSTRUCTIONS
+            1. Analyze the provided image, paying attention to the visual layout to distinguish the question from the alternatives.
+            2. Extract the text of the question and all alternatives (A, B, C, D, E).
+            3. Think step-by-step to determine the correct answer based on factual knowledge.
+            4. Output the result strictly in the XML format defined below.
 
-            INSTRUÇÕES OBRIGATÓRIAS:
-            1. Extraia TODO o texto visível da imagem
-            2. Identifique claramente a pergunta principal
-            3. Liste todas as alternativas disponíveis (A, B, C, D, E, etc.)
-            4. Analise logicamente cada alternativa em relação à pergunta
-            5. Determine a alternativa correta com base em conhecimento factual
+            ### RESPONSE FORMAT
+            <root>
+              <reasoning>
+                [Briefly explain why the correct alternative is correct and why others are wrong. This ensures accuracy.]
+              </reasoning>
+              <text>
+                QUESTÃO: [Question Number or "N/A"]
+                RESPOSTA: [Letter] - [Text of the correct alternative]
+              </text>
+            </root>
 
-            FORMATO DE RESPOSTA OBRIGATÓRIO:
-            <text>
-            NUMERO DA QUESTÃO: [número da questão, se houver]
-            RESPOSTA CORRETA: [alternativa, se houver + texto da alternativa]
-            </text>
+            ### ERROR HANDLING
+            - If the image is completely unreadable: <text>IMAGEM ILEGÍVEL</text>
+            - If it is not a question: <text>QUESTÃO NÃO IDENTIFICADA</text>
 
-            REGRAS IMPORTANTES:
-            - Se não conseguir identificar a questão, informe "QUESTÃO NÃO IDENTIFICADA"
-            - Se a imagem estiver ilegível, informe "IMAGEM ILEGÍVEL"
-            - Seja preciso e objetivo na resposta
-            - Base sua análise em fatos, não em suposições
-            - Não retorne o texto de analise da questão.
-            - Retorne unicamente o formato obrigatorio na tag <text>
+            ### EXAMPLE
+            User Image: 
+            Assistant Output:
+            <root>
+              <reasoning>
+                The question asks for 5 + 5. Option A is 8, Option B is 10. 10 is the correct sum.
+              </reasoning>
+              <text>
+                QUESTÃO: 5
+                RESPOSTA: B - 10
+              </text>
+            </root>
+
+            ### TASK
+            Analyze the image provided by the user and output only the <root> XML block.
             """
 
             gemini_service = gemini_service_account(credentials=google_genai_secret_file, genai_model=gemini_model,
@@ -68,7 +84,8 @@ async def screenshot_to_gemini(event):
 
             result = gemini_service.generate_content([prompt, imagem])
 
-            send_msg_to_webhook(webhook, f'```{result.text.replace('<text>', '').replace('</text>', '')}```',
+            clean_output = parse_gemini_response(result.text)
+            send_msg_to_webhook(webhook, message=clean_output,
                                 logger=Logger(name=f'{__name__}', log_file='log.log'))
 
     except Exception as e:
@@ -107,8 +124,10 @@ async def main():
 
     try:
         logger.info("🚀 Aplicação iniciada!")
-        logger.info(f"📸 Capturar screenshot → Gemini\n{callback_screenshot_to_gemini_keys}")
+        logger.info(f"📸 Capturar screenshot → Gemini {gemini_model}\n{callback_screenshot_to_gemini_keys}")
         logger.info(f"🔴 Finalizar aplicação\n{shutdown_application_keys}")
+        send_msg_to_webhook(webhook, message=f"🤖 *Gemini Agent Online*\nModel: `{gemini_model}`",
+                            logger=Logger(name=f'{__name__}', log_file='log.log'))
 
         # ✅ Loop controlado pela flag
         while running:
@@ -119,6 +138,8 @@ async def main():
     finally:
         logger.info("🛑 Finalizando listener...")
         listener.stop()
+        send_msg_to_webhook(webhook, message="✅ Aplicação finalizada!",
+                            logger=Logger(name=f'{__name__}', log_file='log.log'))
         logger.info("✅ Aplicação finalizada!\n\n")
 
 
